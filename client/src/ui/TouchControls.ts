@@ -11,13 +11,13 @@ export class TouchControls {
   private container: Phaser.GameObjects.Container;
   
   // Joystick
-  private joystickBase: Phaser.GameObjects.Arc;
-  private joystickThumb: Phaser.GameObjects.Arc;
+  private joystickBase!: Phaser.GameObjects.Arc;
+  private joystickThumb!: Phaser.GameObjects.Arc;
   private joystickPointer: Phaser.Input.Pointer | null = null;
   
   // Buttons
-  private interactButton: Phaser.GameObjects.Container;
-  private dropButton: Phaser.GameObjects.Container;
+  private interactButton!: Phaser.GameObjects.Container;
+  private dropButton!: Phaser.GameObjects.Container;
   
   // State
   private currentDirection: 'up' | 'down' | 'left' | 'right' | null = null;
