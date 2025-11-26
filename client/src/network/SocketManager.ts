@@ -90,6 +90,13 @@ export class SocketManager {
       });
 
       this.socket.on('game-state', (gameState) => {
+        // Debug log player positions occasionally
+        if (Math.random() < 0.02) {
+          console.log('📡 game-state players:', Object.keys(gameState.players).map(id => ({
+            id: id.substring(0, 8),
+            pos: `${gameState.players[id].position.x.toFixed(1)},${gameState.players[id].position.y.toFixed(1)}`
+          })));
+        }
         this.onGameState?.(gameState);
       });
 
@@ -130,6 +137,7 @@ export class SocketManager {
   }
 
   sendInput(input: PlayerInput): void {
+    console.log('🎮 sendInput:', input.type, 'socket connected:', this.socket?.connected, 'socketId:', this.socket?.id);
     this.socket?.emit('player-input', input);
   }
 
