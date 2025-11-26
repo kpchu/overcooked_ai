@@ -24,10 +24,10 @@ export class TouchControls {
   private interactPressed: boolean = false;
   private dropPressed: boolean = false;
   
-  // Settings
-  private joystickRadius = 50;
-  private thumbRadius = 25;
-  private deadzone = 10;
+  // Settings - responsive sizes
+  private joystickRadius = 40;
+  private thumbRadius = 20;
+  private deadzone = 8;
 
   constructor(scene: Phaser.Scene) {
     this.scene = scene;
@@ -35,14 +35,21 @@ export class TouchControls {
     this.container.setDepth(100);
     this.container.setScrollFactor(0);
 
+    // Adjust sizes for screen
+    const screenWidth = scene.cameras.main.width;
+    const scale = Math.min(1, screenWidth / 600);
+    this.joystickRadius = Math.max(30, 40 * scale);
+    this.thumbRadius = Math.max(15, 20 * scale);
+
     this.createJoystick();
     this.createButtons();
     this.setupTouchHandlers();
   }
 
   private createJoystick() {
-    const x = 100;
-    const y = this.scene.cameras.main.height - 120;
+    const padding = 20;
+    const x = padding + this.joystickRadius + 10;
+    const y = this.scene.cameras.main.height - padding - this.joystickRadius - 60;
 
     // Base circle
     this.joystickBase = this.scene.add.arc(x, y, this.joystickRadius, 0, 360, false, 0x000000, 0.3);
@@ -72,36 +79,43 @@ export class TouchControls {
   }
 
   private createButtons() {
-    const baseX = this.scene.cameras.main.width - 80;
-    const baseY = this.scene.cameras.main.height - 120;
+    const padding = 20;
+    const screenWidth = this.scene.cameras.main.width;
+    const screenHeight = this.scene.cameras.main.height;
+    const btnSize = Math.max(30, Math.min(40, screenWidth / 15));
+    
+    const baseX = screenWidth - padding - btnSize - 20;
+    const baseY = screenHeight - padding - btnSize - 80;
 
-    // Interact button (SPACE equivalent)
-    this.interactButton = this.createButton(baseX - 60, baseY, '👆', 'Pick', 0x4ecdc4);
+    // Interact button (SPACE equivalent) - larger and more prominent
+    this.interactButton = this.createButton(baseX - 50, baseY + 10, '🐾', 'Pick', 0x4ecdc4, btnSize);
     this.container.add(this.interactButton);
 
     // Drop button (E equivalent)
-    this.dropButton = this.createButton(baseX + 20, baseY - 60, '👇', 'Drop', 0xe74c3c);
+    this.dropButton = this.createButton(baseX + 20, baseY - 50, '📦', 'Drop', 0xe74c3c, btnSize);
     this.container.add(this.dropButton);
   }
 
-  private createButton(x: number, y: number, emoji: string, label: string, color: number): Phaser.GameObjects.Container {
+  private createButton(x: number, y: number, emoji: string, label: string, color: number, size: number = 35): Phaser.GameObjects.Container {
     const container = this.scene.add.container(x, y);
     
     // Button background
-    const bg = this.scene.add.arc(0, 0, 35, 0, 360, false, color, 0.8);
-    bg.setStrokeStyle(3, 0xffffff, 0.8);
+    const bg = this.scene.add.arc(0, 0, size, 0, 360, false, color, 0.85);
+    bg.setStrokeStyle(3, 0xffffff, 0.9);
     container.add(bg);
 
     // Emoji
-    const icon = this.scene.add.text(0, -5, emoji, {
-      fontSize: '24px',
+    const fontSize = Math.max(18, size * 0.6);
+    const icon = this.scene.add.text(0, -3, emoji, {
+      fontSize: `${fontSize}px`,
     }).setOrigin(0.5);
     container.add(icon);
 
     // Label
-    const text = this.scene.add.text(0, 18, label, {
-      fontSize: '10px',
-      fontFamily: 'Fredoka',
+    const labelSize = Math.max(8, size * 0.25);
+    const text = this.scene.add.text(0, size * 0.5, label, {
+      fontSize: `${labelSize}px`,
+      fontFamily: 'Arial',
       color: '#ffffff',
     }).setOrigin(0.5);
     container.add(text);

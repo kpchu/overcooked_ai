@@ -209,7 +209,7 @@ export class LobbyScene extends Phaser.Scene {
 
       // Show waiting message if only one player
       if (this.room.players.length < 2) {
-        const waitText = this.add.text(width / 2, startY + 60, '⏳ Waiting for another player...', {
+        const waitText = this.add.text(width / 2, startY + 60, '⏳ Waiting for another player... or play solo!', {
           fontSize: '16px',
           fontFamily: 'Fredoka',
           color: '#8b7355',
@@ -227,10 +227,11 @@ export class LobbyScene extends Phaser.Scene {
 
     this.startButton.setVisible(true);
 
-    const allReady = this.room.players.length >= 2 && 
+    // Allow solo play - just need the host to be ready
+    const canStart = this.room.players.length >= 1 && 
                      this.room.players.every(p => p.isReady);
 
-    if (allReady) {
+    if (canStart) {
       this.startButton.setStyle({ backgroundColor: '#27ae60' });
       this.startButton.setInteractive({ useHandCursor: true });
     } else {
@@ -253,8 +254,8 @@ export class LobbyScene extends Phaser.Scene {
 
   private startGame() {
     console.log('🚀 Start Game clicked!', this.room);
-    if (!this.room || this.room.players.length < 2) {
-      this.statusText.setText('❌ Need 2 players to start!');
+    if (!this.room || this.room.players.length < 1) {
+      this.statusText.setText('❌ Need at least 1 player to start!');
       return;
     }
 

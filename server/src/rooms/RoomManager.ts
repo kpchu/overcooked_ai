@@ -150,7 +150,8 @@ export class RoomManager {
   canStartGame(roomCode: string): boolean {
     const room = this.rooms.get(roomCode);
     if (!room) return false;
-    if (room.players.size < 2) return false;
+    // Allow single player mode - just need at least 1 player
+    if (room.players.size < 1) return false;
     
     for (const player of room.players.values()) {
       if (!player.isReady) return false;
