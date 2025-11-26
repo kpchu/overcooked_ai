@@ -88,7 +88,14 @@ export class GameScene extends Phaser.Scene {
     this.playerPositions.clear();
     this.timerPulsing = false;
     
-    console.log('🎮 GameScene init - playerId:', this.playerId, 'playerName:', this.playerName);
+    console.log('🎮 GameScene init:', {
+      playerId: this.playerId,
+      playerName: this.playerName,
+      roomCode: this.roomCode,
+      socketId: socketManager.socketId,
+      playersInState: Object.keys(data.initialState.players),
+      myPlayerExists: !!data.initialState.players[this.playerId]
+    });
   }
 
   create() {
