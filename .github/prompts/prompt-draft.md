@@ -1,0 +1,1 @@
+create web app like overcooked(switch game) that allow two player real-time to play together, and the style is cute and more cat element, and do not need DB storage, and i want to deploy both frontend and backend to render, and allow to play with friend on internet

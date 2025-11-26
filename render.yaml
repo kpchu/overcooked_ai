@@ -1,0 +1,29 @@
+services:
+  # Backend - Web Service
+  - type: web
+    name: cat-kitchen-server
+    runtime: node
+    region: oregon
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CORS_ORIGIN
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
+
+  # Frontend - Static Site
+  - type: web
+    name: cat-kitchen-client
+    runtime: static
+    region: oregon
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_SERVER_URL
+        sync: false
+    autoDeploy: true
