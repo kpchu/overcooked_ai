@@ -92,6 +92,9 @@ export class RoomManager {
 
     room.players.set(playerId, player);
     this.playerRooms.set(playerId, code.toUpperCase());
+    
+    console.log(`✅ Player joined - ID: ${playerId}, Name: ${playerName}, Room: ${code.toUpperCase()}`);
+    console.log(`   Room now has ${room.players.size} players:`, Array.from(room.players.keys()));
 
     return this.getRoomInfo(code.toUpperCase());
   }
@@ -275,14 +278,25 @@ export class RoomManager {
 
   handlePlayerInput(playerId: string, input: PlayerInput): void {
     const roomCode = this.playerRooms.get(playerId);
-    if (!roomCode) return;
+    console.log(`📥 Input from ${playerId}: ${input.type}, roomCode: ${roomCode}`);
+    if (!roomCode) {
+      console.log(`❌ No room found for player ${playerId}`);
+      return;
+    }
 
     const room = this.rooms.get(roomCode);
-    if (!room || !room.gameState || !room.gameState.isPlaying) return;
+    if (!room || !room.gameState || !room.gameState.isPlaying) {
+      console.log(`❌ Room not ready: room=${!!room}, gameState=${!!room?.gameState}, isPlaying=${room?.gameState?.isPlaying}`);
+      return;
+    }
 
     const player = room.players.get(playerId);
-    if (!player) return;
+    if (!player) {
+      console.log(`❌ Player ${playerId} not found in room. Players:`, Array.from(room.players.keys()));
+      return;
+    }
 
+    console.log(`✅ Processing ${input.type} for player ${player.name}`);
     switch (input.type) {
       case 'move':
         this.handleMove(player, input.direction!, room);

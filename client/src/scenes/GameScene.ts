@@ -87,6 +87,8 @@ export class GameScene extends Phaser.Scene {
     this.comboCount = 0;
     this.playerPositions.clear();
     this.timerPulsing = false;
+    
+    console.log('🎮 GameScene init - playerId:', this.playerId, 'playerName:', this.playerName);
   }
 
   create() {
